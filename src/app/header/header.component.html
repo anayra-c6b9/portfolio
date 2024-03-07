@@ -1,23 +1,25 @@
 <nav class="flex font-gothicNew">
-  <ul class="flex flex-row items-center self-center w-full h-12 bg-white dark:bg-primary">
-    <li class="px-3 h-full flex items-center text-primary dark:text-secondary" routerLink="./home" routerLinkActive="bg-gray">HOME</li>
-    <li class="h-full relative text-primary dark:text-secondary">
-      <a id="file" class="px-3 h-full block flex items-center" href="javascript:void(0)">
+    <ul class="flex flex-row items-center self-center w-full h-12 bg-white dark:bg-primary">
+        <li class="px-3 h-full flex items-center text-primary dark:text-secondary" routerLink="./home" routerLinkActive="bg-gray">
+            HOME
+        </li>
+        <li class="h-full relative text-primary dark:text-secondary">
+            <a id="file" class="px-3 h-full block flex items-center" href="javascript:void(0)">
         FILE
       </a>
-      <ul id="file-dropdown" class="flex flex-col absolute bg-white dark:bg-primary start-0 top-full">
-        <ng-template ngFor let-navlink [ngForOf]="headerLinks" let-i="index" [ngForTrackBy]="trackfn">
-          <li class="border-t">
-            <a class="block px-3 py-2 " [routerLink]="navlink.link" routerLinkActive="bg-gray-400">
+            <ul id="file-dropdown" class="flex flex-col absolute bg-white dark:bg-primary start-0 top-full z-10">
+                <ng-template ngFor let-navlink [ngForOf]="headerLinks" let-i="index" [ngForTrackBy]="trackfn">
+                    <li class="border-t dark:border-secondary">
+                        <a class="block px-3 py-2" [routerLink]="navlink.link" routerLinkActive="bg-gray-400">
               {{ navlink.name }}
             </a>
-          </li>
-        </ng-template>
-      </ul>
-    </li>
-    <li class="px-3 ml-auto">
-      <input type="checkbox" id="switch" (change)="toggleMode($event)" />
-      <label for="switch"></label>
-    </li>
-  </ul>
+                    </li>
+                </ng-template>
+            </ul>
+        </li>
+        <li class="px-3 ml-auto">
+            <input type="checkbox" id="switch" (change)="toggleMode($event)" />
+            <label for="switch"></label>
+        </li>
+    </ul>
 </nav>

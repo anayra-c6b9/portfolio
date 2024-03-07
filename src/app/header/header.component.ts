@@ -9,80 +9,84 @@ import { trackById } from 'utils/trackFunctions';
   standalone: true,
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.sass'],
-  imports: [CommonModule, RouterModule]
+  imports: [CommonModule, RouterModule],
 })
 export class HeaderComponent implements OnInit {
-
   headerLinks: CustomLinkCollection = [
     {
       id: 1,
-      link: ["./blog"],
-      name: "BLOG"
+      link: ['./blog'],
+      name: 'BLOG',
     },
     {
       id: 2,
-      link: ["./projects"],
-      name: "PROJECTS"
+      link: ['./projects'],
+      name: 'PROJECTS',
     },
     {
       id: 3,
-      link: ["./contact"],
-      name: "CONTACT"
+      link: ['./contact'],
+      name: 'CONTACT',
     },
     {
       id: 4,
-      link: ["./resources"],
-      name: "RESOURCES"
-    }
-  ]
+      link: ['./resources'],
+      name: 'RESOURCES',
+    },
+  ];
 
-  trackfn = trackById
+  trackfn = trackById;
 
   ngOnInit(): void {
-    const file = document.getElementById("file");
+    const file = document.getElementById('file');
 
-    const dropdown = document.getElementById("file-dropdown")
-    if(dropdown !== null)
-      dropdown.style.visibility = "hidden"
+    const dropdown = document.getElementById('file-dropdown');
+    if (dropdown !== null) dropdown.style.visibility = 'hidden';
+
+    //check dark mode if yes automatically toggle switch
+    const themeSwitch: HTMLInputElement = document.getElementById(
+      'switch'
+    )! as HTMLInputElement;
+    if (document.documentElement.classList.contains('dark')) {
+      themeSwitch.checked = true;
+    }
 
     // adding events to FILE link
-    file?.addEventListener("click", function() {
-      if(dropdown !== null){
-          dropdown.style.visibility === "visible" ? dropdown.style.visibility = "hidden" : dropdown.style.visibility = "visible"
+    file?.addEventListener('click', function () {
+      if (dropdown !== null) {
+        dropdown.style.visibility === 'visible'
+          ? (dropdown.style.visibility = 'hidden')
+          : (dropdown.style.visibility = 'visible');
       }
-    })
-    file?.addEventListener("blur", function() {
+    });
+    file?.addEventListener('blur', function () {
       setTimeout(() => {
-        if(dropdown !== null){
-          dropdown.style.visibility = "hidden"
+        if (dropdown !== null) {
+          dropdown.style.visibility = 'hidden';
         }
       }, 50);
-    })
+    });
 
     // adding events to Dropdown links
-    Array.from(dropdown?.children || []).forEach(element => {
-      element.addEventListener("click", function(event) {
-          event.stopPropagation()
+    Array.from(dropdown?.children || []).forEach((element) => {
+      element.addEventListener('click', function (event) {
+        event.stopPropagation();
 
-          if(dropdown !== null && dropdown.style.visibility === "visible"){
-            dropdown.style.visibility = "hidden"
-          }
-      })
-      
+        if (dropdown !== null && dropdown.style.visibility === 'visible') {
+          dropdown.style.visibility = 'hidden';
+        }
+      });
     });
   }
 
   // toggle color mode
   toggleMode = (event: any) => {
-
-    const body = document.body;
-
-    if(event.target.checked){
+    if (event.target.checked) {
       document.documentElement.classList.add('dark');
       localStorage.setItem('aryan-portfolio-theme', 'dark');
-    }
-    else{
+    } else {
       document.documentElement.classList.remove('dark');
-      localStorage.setItem('aryan-portfolio-theme', 'light');}
-  }
+      localStorage.setItem('aryan-portfolio-theme', 'light');
+    }
+  };
 }
