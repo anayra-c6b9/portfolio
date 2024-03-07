@@ -6,6 +6,11 @@ export const theme = {
   extend: {
     colors: {
       success: "#66b96f",
+      unsucecss: "#171a1e",
+      shadow: "f9f9f9",
+      darkness: "2d2d2e",
+      primary: "#0f0f10",
+      secondary: "#848890",
     },
     fontFamily: {
       gothicNew: ['"Plus Jakarta Sans"', ..._fontFamily.sans],
@@ -15,3 +20,4 @@ export const theme = {
   },
 };
 export const plugins = [];
+export const darkMode = "class"
