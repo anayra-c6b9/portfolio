@@ -1,0 +1,22 @@
+<div class="h-60 relative overflow-hidden text-primary">
+    <div class="w-full h-full overflow-hidden">
+        <img [src]="cardInfo.image_source" [alt]="cardInfo.image_description" class="h-full object-cover w-full">
+    </div>
+    <div class="rounded-t-lg bg-white/[0.7] flex flex-col   items-center absolute bottom-0 left-0 w-full text-sm px-4 py-3">
+        <div class="w-6 h-4 fill-gray-800 flex justify-center items-center mb-3" [style]="labelRaised ? 'transform: rotate(180deg)' : null" (click)="toggleLabel()">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M182.6 137.4c-12.5-12.5-32.8-12.5-45.3 0l-128 128c-9.2 9.2-11.9 22.9-6.9 34.9s16.6 19.8 29.6 19.8H288c12.9 0 24.6-7.8 29.6-19.8s2.2-25.7-6.9-34.9l-128-128z"/></svg>
+        </div>
+        <div class="text-base text-justify mb-3">
+            {{ cardInfo.title }}
+        </div>
+        <div [class]="'h-0 overflow-hidden relative opacity-0 m-0 ' + (labelRaised ? 'h-24 opacity-100 mt-0': '')">
+            <span>{{ cardInfo.description }}</span>
+            <div class="w-full h-16 absolute bottom-0 start-0"
+                style="-webkit-mask: linear-gradient(#fff, #ffff); mask: linear-gradient(#fff, #ffff);"
+            ></div>
+        </div>
+        <div>
+            <a class="text-decoration-underline text-sucess text-sm" [routerLink]="cardInfo.link">Read more &#10132;</a>
+        </div>
+    </div>
+</div>
