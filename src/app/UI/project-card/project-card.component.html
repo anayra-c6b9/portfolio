@@ -1,0 +1,14 @@
+<div class="h-60 relative overflow-hidden text-primary">
+    <div class="w-full h-full overflow-hidden">
+        <img [src]="projectInfo.image_source" [alt]="projectInfo.image_description" class="h-full object-cover w-full" />
+    </div>
+    <div class="rounded-t-2xl bg-white/[0.7] flex flex-col items-center absolute bottom-0 left-0 w-full text-sm px-4 py-3">
+        <div class="text-base text-justify mb-3">
+            {{ projectInfo.title }}
+        </div>
+        <div>
+            <a class="text-decoration-underline text-sucess text-sm" [routerLink]="projectInfo.link">Read more &#10132;</a
+      >
+    </div>
+  </div>
+</div>

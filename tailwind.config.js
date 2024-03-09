@@ -7,8 +7,8 @@ export const theme = {
         colors: {
             sucess: "#66b96f",
             unsucess: "#1e232a",
-            shadow: "f9f9f9",
-            darkness: "2d2d2e",
+            shadow: "#e8e8e8",
+            darkness: "#2d2d2e",
             primary: "#0f0f10",
             secondary: "#848890",
         },
