@@ -1,0 +1,31 @@
+@import "tailwindcss";
+@theme {
+  --breakpoint-xs: 480px;
+}
+
+@theme {
+  --font-terminal: "JetBrains Mono", monospace;
+}
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+html.no-scrollbar,
+body.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+html.no-scrollbar::-webkit-scrollbar,
+body.no-scrollbar::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
