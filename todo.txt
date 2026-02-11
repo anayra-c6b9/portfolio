@@ -1,1 +1,3 @@
-> add a new section near the bottom right of profile
+> fix the navigation header
+> make the skills page
+> add logic to send message

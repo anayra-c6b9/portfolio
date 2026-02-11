@@ -10,12 +10,28 @@ import Postgreslogo from "../../assets/postgres-logo.svg";
 import Supabaselogo from "../../assets/supabase-logo.png";
 import Dockerlogo from "../../assets/docker-logo.svg";
 import Linuxlogo from "../../assets/linux-logo.svg";
+import type React from "react";
+import { useNavigate } from "react-router-dom";
 
 interface ProfileProps {
   __noPropsAllowed?: never;
 }
 
 const Profile: FC<ProfileProps> = () => {
+  const navigate = useNavigate();
+  const currentProject = {
+    projectName: "Retro Chain",
+    projectElementId: "0",
+    projectSummary:
+      "Retro Chain is an in-restaurant ordering system focusing on simplifying operations and delivering scalable features.",
+  };
+
+  function jumpToWorkHandler(e: React.MouseEvent<HTMLButtonElement>) {
+    e.preventDefault();
+
+    navigate(`../projects#${currentProject.projectElementId}`);
+  }
+
   return (
     <div className="w-full">
       <div className={"w-full grid grid-cols-3 grid-rows-3 gap-4"}>
@@ -131,12 +147,44 @@ const Profile: FC<ProfileProps> = () => {
           </section>
         </div>
         <div>
-          <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quam sit
-            molestias cumque ut architecto beatae excepturi, est blanditiis
-            asperiores odit ipsum optio numquam velit unde porro impedit
-            adipisci mollitia accusamus?
-          </p>
+          <p>Currently working on...</p>
+          <div>
+            <p className="text-lg mt-6">
+              {"> "}
+              {currentProject.projectName}
+            </p>
+            <p className="text-sm font-extralight mt-3">
+              {currentProject.projectSummary}
+            </p>
+            <button
+              type="submit"
+              className="
+                  group relative ml-auto mr-8 mt-8 block select-none
+                  px-6 py-2 text-lg font-normal
+                  bg-transparent text-black
+
+                  after:content-['']
+                  after:absolute after:inset-0
+                  after:border after:border-white
+                  after:translate-x-2 after:translate-y-2
+                  after:z-0
+                  after:pointer-events-none
+
+                  before:content-['']
+                  before:absolute before:inset-0
+                  before:bg-white
+                  before:z-[1]
+                  before:transition-transform before:duration-75
+                  before:pointer-events-none
+                  active:before:translate-x-2 active:before:translate-y-2
+                "
+              onClick={jumpToWorkHandler}
+            >
+              <span className="relative z-[2] inline-block transition-transform duration-75 group-active:translate-x-2 group-active:translate-y-2">
+                Click for details!
+              </span>
+            </button>
+          </div>
         </div>
       </div>
     </div>

@@ -44,10 +44,28 @@ const Experience: FC<ExperienceProps> = () => {
 
   const exp: Array<ExperienceData> = [
     {
+      range: "2023-2023",
+      institute: "Green Woods Digital",
+      position: "Intern Software Developer",
+      role: [
+        "Developed and maintained responsive web applications",
+        "Assisted in building RESTful APIs and integrating frontend with backend services",
+        "Debugged and resolved UI/UX issues across multiple browsers",
+        "Wrote clean and maintainable code following best practices",
+      ],
+    },
+    {
       range: "2024-2025",
       institute: "Salesian college, siliguri campus",
       position: "Frontend developer",
-      role: ["Frontend developement", "Database operations", "Support tasks"],
+      role: [
+        "Contributed to frontend development of the college ERP system using Angular",
+        "Built and maintained reusable UI components",
+        "Integrated frontend features with backend APIs under senior guidance",
+        "Fixed bugs and improved existing ERP modules",
+        "Performed database-related operations on production MySQL server",
+        "Provided technical support to faculty and administrative staff",
+      ],
     },
   ];
 
@@ -59,13 +77,13 @@ const Experience: FC<ExperienceProps> = () => {
           {items.map((it, i) => (
             <li
               key={it.range}
-              className="grid grid-cols-[140px_1fr] gap-6 mb-4"
+              className="grid grid-cols-[140px_1fr] gap-6 mb-8"
             >
               <div className="relative">
-                <div className="text-sm text-neutral-300">{it.range}</div>
+                <div className="text-sm text-blue-300">{it.range}</div>
 
                 {i !== items.length - 1 && (
-                  <span className="absolute left-1/4 top-6 bottom-[-8px] w-px bg-white/60" />
+                  <span className="absolute left-2/6 top-6 bottom-[-28px] w-px bg-white/60" />
                 )}
               </div>
 
@@ -82,19 +100,19 @@ const Experience: FC<ExperienceProps> = () => {
           ))}
         </ul>
       </section>
-      <section className="mt-4">
+      <section className="mt-8">
         <div className="text-xl font-normal underline mb-6">Experience</div>
         <ul className="text-base text-sm">
           {exp.map((it, i) => (
             <li
               key={it.range}
-              className="grid grid-cols-[140px_1fr] gap-6 mb-4"
+              className="grid grid-cols-[140px_1fr] gap-6 mb-8"
             >
               <div className="relative">
-                <div className="text-sm text-neutral-300">{it.range}</div>
+                <div className="text-sm text-green-300">[{it.range}]</div>
 
-                {i !== items.length - 1 && (
-                  <span className="absolute left-1/4 top-6 bottom-[-8px] w-px bg-white/60" />
+                {i !== exp.length - 1 && (
+                  <span className="absolute left-2/6 top-6 bottom-[-28px] w-px bg-white/60" />
                 )}
               </div>
 
@@ -104,9 +122,9 @@ const Experience: FC<ExperienceProps> = () => {
                   {it.position}
                 </div>
                 <div className="text-sm font-extralight italics">
-                  <ul>
+                  <ul className="list-disc ml-4">
                     {it.role.map((rl) => (
-                      <li>{rl}</li>
+                      <li key={rl.slice(0, 20)}>{rl}</li>
                     ))}
                   </ul>
                 </div>
