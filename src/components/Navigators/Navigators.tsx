@@ -1,13 +1,11 @@
 import type React from "react";
 import type { FC } from "react";
 import { useNavigate } from "react-router-dom";
+import type { LinkInterface } from "../Header/Header";
 // import styles from "./navigators.module.css";
 
-export interface NavigatorsProps {
+export interface NavigatorsProps extends LinkInterface {
   currentSelected: number;
-  link: string;
-  text_value: string;
-  id_value: number;
   onClickHandler: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 

@@ -1,3 +1,2 @@
-> fix the navigation header
 > make the skills page
 > add logic to send message
