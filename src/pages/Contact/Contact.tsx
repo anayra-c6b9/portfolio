@@ -3,24 +3,34 @@ import Gmaillogo from "../../assets/gmail-logo.svg";
 import Githublogo from "../../assets/github-logo.svg";
 import Instagramlogo from "../../assets/instagram-logo.svg";
 import Facebooklogo from "../../assets/facebook-logo.svg";
+import { sendUserMessage, sendVerificationCode } from "../../api/apis";
 
 interface ContactProps {
   __noPropsAllowed?: never;
 }
 
 const Contact: FC<ContactProps> = () => {
-  const [userName, setUserName] = useState("");
+  const [userMail, setUserMail] = useState("");
   const [userText, setUserText] = useState("");
-  const userNameLimit = 40;
+  const userMailLimit = 40;
 
-  const [userNameCount, setUserNameCount] = useState(0);
+  const [userMailCount, setUserMailCount] = useState(0);
   const [userTextCount, setUserTextCount] = useState(0);
   const userTextLimit = 400;
 
-  const userNameHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.currentTarget.value.length > userNameLimit) return;
-    setUserName(e.currentTarget.value);
-    setUserNameCount(e.currentTarget.value.length);
+  const [fieldDisabled, setFieldDisabled] = useState(false);
+  const [isCodeRequested, setIsCodeRequested] = useState(false);
+  const [isCallingRequestApi, setIsCallingRequestApi] = useState(false);
+
+  // verification code
+  const [verificationCode, setVerificationCode] = useState("");
+  const [isverifying, setIsVerifying] = useState(false);
+  const verificationCodeLimit = 6;
+
+  const userMailHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.currentTarget.value.length > userMailLimit) return;
+    setUserMail(e.currentTarget.value);
+    setUserMailCount(e.currentTarget.value.length);
   };
 
   const userTextHandler = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -29,12 +39,98 @@ const Contact: FC<ContactProps> = () => {
     setUserTextCount(e.currentTarget.value.length);
   };
 
-  const onSubmitHandler = (e: React.FormEvent<HTMLFormElement>) => {
+  const disableFields = () => {
+    setFieldDisabled(true);
+  };
+  const ableFields = () => {
+    setFieldDisabled(false);
+  };
+  const resetFields = () => {
+    setUserMail("");
+    setUserMailCount(0);
+    setUserText("");
+    setUserTextCount(0);
+    setFieldDisabled(false);
+    setIsCodeRequested(false);
+    setVerificationCode("");
+    setIsVerifying(false);
+  };
+
+  const userCodeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
 
-    // const formData = new FormData(form);
-    // console.log(formData.get("user-name"));
-    // console.log(formData.get("user-message"));
+    if (e.currentTarget.value.length > verificationCodeLimit) return;
+
+    setVerificationCode(e.currentTarget.value);
+  };
+
+  const checkingMailRegex = (data: string): boolean => {
+    const regExp = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!regExp.test(data)) return false;
+    return true;
+  };
+
+  const onSubmitHandler = (e: React.SubmitEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsCallingRequestApi(true);
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+    const user_email = (formData.get("user-mail") as string).trim();
+    const user_message = (formData.get("user-message") as string).trim();
+
+    console.log(user_email, user_message);
+
+    if (
+      user_email == null ||
+      user_email == "" ||
+      user_message == null ||
+      user_message == ""
+    ) {
+      console.log("Error : form data not found");
+      return;
+    }
+
+    if (!checkingMailRegex(user_email)) {
+      console.log("Validation failed for user mail");
+      return;
+    }
+
+    // send data to api
+    disableFields();
+    const response = sendUserMessage(user_email, user_message);
+    response.then((res) => {
+      if (res.ok) {
+        console.log("Response is ok");
+        // operation on setting up the verification code for the user
+        setIsCodeRequested(true);
+        setIsCallingRequestApi(false);
+      } else {
+        ableFields();
+        setIsCallingRequestApi(false);
+        // operation on letting user know that request failed
+      }
+    });
+  };
+
+  const onVerifyHandler = (e: React.SubmitEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const user_mail = userMail.trim();
+    const verification_code = verificationCode.trim();
+
+    setIsVerifying(true);
+    const response = sendVerificationCode(user_mail, verification_code);
+    response.then((res) => {
+      if (res.ok) {
+        console.log("Response is ok");
+        // operation on letting user know that verification successful
+        resetFields();
+      } else {
+        // operation on letting user know that verification failed
+        setIsVerifying(false);
+      }
+    });
   };
 
   return (
@@ -129,19 +225,20 @@ const Contact: FC<ContactProps> = () => {
                 </span>
                 <input
                   type="email"
-                  name="user-name"
-                  id="user-name"
+                  name="user-mail"
+                  id="user-mail"
                   required
                   pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$"
                   title="Please enter a valid email (e.g. name@domain.com)"
                   className="w-full border border-white p-2 pl-6"
                   placeholder="Enter your email"
-                  value={userName}
-                  onChange={userNameHandler}
+                  value={userMail}
+                  onChange={userMailHandler}
+                  disabled={fieldDisabled}
                 />
 
-                <span className="absolute right-0 px-1 py-0.5 top-0 -translate-y-[100%] text-black bg-white text-xs">
-                  {userNameCount}/{userNameLimit}
+                <span className="absolute right-0 px-1 py-0.5 top-0 -translate-y-full text-black bg-white text-xs">
+                  {userMailCount}/{userMailLimit}
                 </span>
               </div>
               <div className="w-full relative">
@@ -154,14 +251,23 @@ const Contact: FC<ContactProps> = () => {
                   value={userText}
                   onChange={userTextHandler}
                   required
+                  disabled={fieldDisabled}
                 ></textarea>
-                <span className="absolute py-0.5 px-1 right-0 top-0 -translate-y-[100%] text-black bg-white text-xs">
+                <span className="absolute py-0.5 px-1 right-0 top-0 -translate-y-full text-black bg-white text-xs">
                   {userTextCount}/{userTextLimit}
                 </span>
               </div>
+              {isCodeRequested ? (
+                <div className="text-xs text-green-300 text-right">
+                  A verification code has been sent to your email
+                </div>
+              ) : null}
               <button
                 type="submit"
-                className="
+                onSubmit={(e) => {
+                  e.preventDefault();
+                }}
+                className={`
                   group relative ml-auto mr-2 mt-6 block select-none
                   px-6 py-2 text-lg font-normal
                   bg-transparent text-black
@@ -176,17 +282,74 @@ const Contact: FC<ContactProps> = () => {
                   before:content-['']
                   before:absolute before:inset-0
                   before:bg-white
-                  before:z-[1]
+                  before:z-1
                   before:transition-transform before:duration-75
                   before:pointer-events-none
                   active:before:translate-x-2 active:before:translate-y-2
-                "
+                `}
               >
-                <span className="relative z-[2] inline-block transition-transform duration-75 group-active:translate-x-2 group-active:translate-y-2">
-                  Send
+                <span className="relative z-2 inline-block transition-transform duration-75 group-active:translate-x-2 group-active:translate-y-2">
+                  {!isCodeRequested && !isCallingRequestApi ? "Send" : ""}
+                  {!isCodeRequested && isCallingRequestApi ? "Sending ..." : ""}
+                  {isCodeRequested
+                    ? isCallingRequestApi
+                      ? "Resending ..."
+                      : "Resend Code"
+                    : ""}
                 </span>
               </button>
             </form>
+            {isCodeRequested ? <hr className="my-8 bg-white" /> : ""}
+            {isCodeRequested ? (
+              <form onSubmit={onVerifyHandler}>
+                <input
+                  type="number"
+                  name="user-code"
+                  id="user-code"
+                  required
+                  title="Please enter the code"
+                  maxLength={6}
+                  minLength={6}
+                  size={6}
+                  className="w-full border border-white p-2 pl-6"
+                  placeholder="Enter your code"
+                  value={verificationCode}
+                  onChange={userCodeHandler}
+                />
+                <button
+                  type="submit"
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                  }}
+                  className={`
+                  group relative ml-auto mr-2 mt-6 block select-none
+                  px-6 py-2 text-lg font-normal
+                  bg-transparent text-black
+
+                  after:content-['']
+                  after:absolute after:inset-0
+                  after:border after:border-white
+                  after:translate-x-2 after:translate-y-2
+                  after:z-0
+                  after:pointer-events-none
+
+                  before:content-['']
+                  before:absolute before:inset-0
+                  before:bg-white
+                  before:z-1
+                  before:transition-transform before:duration-75
+                  before:pointer-events-none
+                  active:before:translate-x-2 active:before:translate-y-2
+                `}
+                >
+                  <span className="relative z-2 inline-block transition-transform duration-75 group-active:translate-x-2 group-active:translate-y-2">
+                    {isverifying ? "Verifying..." : "Verify"}
+                  </span>
+                </button>
+              </form>
+            ) : (
+              ""
+            )}
           </div>
         </section>
       </div>

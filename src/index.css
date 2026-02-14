@@ -54,6 +54,16 @@ body.no-scrollbar::-webkit-scrollbar {
     height: 0;
 }
 
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+
 @keyframes gradient-shift {
     0% {
         background-position: 0% 50%;
